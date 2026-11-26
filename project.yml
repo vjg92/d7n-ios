@@ -1,0 +1,47 @@
+name: D7NKeyboardTest
+options:
+  bundleIdPrefix: local.d7n
+  deploymentTarget:
+    iOS: "26.0"
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    CODE_SIGN_STYLE: Automatic
+targets:
+  D7NTest:
+    type: application
+    platform: iOS
+    sources: [App, Shared]
+    dependencies:
+      - target: D7NKeyboard
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: d7n test
+        UILaunchScreen: {}
+        NSMicrophoneUsageDescription: d7n records only while you dictate and transcribes on this iPhone.
+        NSSpeechRecognitionUsageDescription: d7n uses on-device speech transcription.
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: local.d7n.kbtest
+  D7NKeyboard:
+    type: app-extension
+    platform: iOS
+    sources: [Keyboard, Shared]
+    info:
+      path: Keyboard/Info.plist
+      properties:
+        CFBundleDisplayName: d7n
+        NSMicrophoneUsageDescription: d7n records only while you dictate and transcribes on this iPhone.
+        NSSpeechRecognitionUsageDescription: d7n uses on-device speech transcription.
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.keyboard-service
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).KeyboardViewController
+          NSExtensionAttributes:
+            RequestsOpenAccess: true
+            IsASCIICapable: false
+            PrefersRightToLeft: false
+            PrimaryLanguage: en-AU
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: local.d7n.kbtest.keyboard
