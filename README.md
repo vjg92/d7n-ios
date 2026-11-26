@@ -13,7 +13,13 @@ iOS does not let keyboard extensions record with `AVAudioEngine`; starting the e
 3. Swift converts the buffers and runs `SpeechAnalyzer` + `SpeechTranscriber` in the keyboard process.
 4. The text is inserted with `textDocumentProxy.insertText`. No clipboard.
 
-Audio is kept in memory only and capped at 2 minutes.
+## Safeguards
+
+- Audio is kept in memory only, never written to disk, and dropped after transcription.
+- The mic turns off after 2 minutes, and when the keyboard is hidden, you switch apps, or you move to another text field. Anything recorded is then thrown away.
+- Text is only typed into the field where dictation started. If you have moved elsewhere, it is discarded.
+- The hidden web view loads only its built-in page. All network requests and navigations are blocked, and if the block can't be set up the recorder doesn't load.
+- Only microphone requests from that page are approved; camera and other requests are refused. iOS still enforces the app's microphone permission.
 
 ## Caveats
 
